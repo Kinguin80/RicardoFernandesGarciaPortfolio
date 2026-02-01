@@ -375,24 +375,27 @@ body:has(#contact.active) .hlines-background {
 
 /* About Page */
 .about-content {
-    max-width: 850px;
+    max-width: 980px;
 }
 
 .about-box {
     display: flex;
-    gap: 2.5rem;
-    align-items: flex-start;
-    padding: 2rem 2.5rem;
+    gap: 3rem;
+    align-items: stretch;
+    padding: 2.5rem 3rem;
 }
 
 .about-image {
     flex-shrink: 0;
-    width: 220px;
+    width: 340px;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .about-image img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
     border-radius: 4px;
 }
@@ -402,7 +405,7 @@ body:has(#contact.active) .hlines-background {
 }
 
 .about-text p {
-    font-size: 1.35rem;
+    font-size: 1.45rem;
     line-height: 1.8;
 }
 
@@ -413,13 +416,18 @@ body:has(#contact.active) .hlines-background {
 @media (max-width: 640px) {
     .about-box {
         flex-direction: column;
-        padding: 1.5rem;
+        align-items: flex-start;
+        padding: 2rem;
     }
     .about-image {
-        width: 180px;
+        width: 260px;
+        overflow: visible;
+    }
+    .about-image img {
+        height: auto;
     }
     .about-text p {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
     }
 }
 
@@ -532,7 +540,9 @@ body:has(#contact.active) .hlines-background {
     display: flex;
     gap: 4rem !important; /* ONLY place that controls space between carousel items */
     animation: scrollRight 30s linear infinite;
+    -webkit-animation: scrollRight 30s linear infinite;
     width: fit-content;
+    will-change: transform;
 }
 
 /* Items shrink to image width so gap is the real space between artworks (not empty 420px boxes) */
@@ -611,16 +621,19 @@ body:has(#contact.active) .hlines-background {
 
 @keyframes scrollRight {
     0% {
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
     }
     100% {
-        transform: translateX(-50%);
+        transform: translate3d(-50%, 0, 0);
+        -webkit-transform: translate3d(-50%, 0, 0);
     }
 }
 
 /* Pause animation on hover */
 .works-carousel-container:hover .works-carousel {
     animation-play-state: paused;
+    -webkit-animation-play-state: paused;
 }
 
 /* Home carousel footer - Quick Mini Portfolio button */
