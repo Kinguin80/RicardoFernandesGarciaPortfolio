@@ -1619,9 +1619,13 @@ function setupMiniPortfolioButton() {
     
     function closeMiniPortfolio() {
         document.body.classList.remove('mini-portfolio-open');
+        overlay.classList.add('closing');
         overlay.classList.remove('active');
         overlay.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        setTimeout(() => {
+            overlay.classList.remove('closing');
+            document.body.style.overflow = '';
+        }, 450);
     }
     
     btn.addEventListener('click', openMiniPortfolio);
