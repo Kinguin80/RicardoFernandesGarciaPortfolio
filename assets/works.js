@@ -38,7 +38,7 @@
     const state = {
         activeTags: new Set(),
         search: "",
-        sort: "featured"
+        sort: "selected"
     };
 
     const chipsEl = $("#filterChips");
@@ -97,13 +97,16 @@
     function sortProjects(list){
         const v = state.sort;
         const a = list.slice();
-        if(v === "featured"){
+        const hasSearch = (state.search || "").trim().length > 0;
+        if(v === "selected" && !hasSearch){
             a.sort((p,q) => {
-                const fp = p.featured ? 0 : 1;
-                const fq = q.featured ? 0 : 1;
-                if(fp !== fq) return fp - fq;
+                const sp = p.selectedWork ? 0 : 1;
+                const sq = q.selectedWork ? 0 : 1;
+                if(sp !== sq) return sp - sq;
                 return (yearKey(q) - yearKey(p)) || (p.title||"").localeCompare(q.title||"");
             });
+        }else if(v === "selected" && hasSearch){
+            a.sort((p,q) => (yearKey(q) - yearKey(p)) || (p.title||"").localeCompare(q.title||""));
         }else if(v === "newest"){
             a.sort((p,q) => (yearKey(q) - yearKey(p)) || (p.title||"").localeCompare(q.title||""));
         }else if(v === "oldest"){
@@ -126,12 +129,14 @@
         return wrap;
     }
 
+    function getImagePath(item){
+        const path = (item.images && item.images[0]) ? item.images[0] : (item.thumbnail || "");
+        return path ? path.replace(/\.(jpg|jpeg|png|webp|gif)$/i, "") : "";
+    }
+
     function renderBento(list){
         if (!bentoEl) return;
-        // Use the provided list (which should already be filtered and sorted)
-        const featured = list.filter(p => p.featured);
-        const picks = (featured.length ? featured : list).slice(0,8);
-
+        const picks = list.slice(0,8);
         const sizes = ["size-l","size-m","size-s","size-xs","size-s","size-m","size-xs","size-s"];
         bentoEl.innerHTML = "";
 
@@ -141,6 +146,22 @@
             tile.tabIndex = 0;
             tile.setAttribute("role","button");
             tile.setAttribute("aria-label", `Open ${p.title}`);
+
+            const imgWrap = document.createElement("div");
+            imgWrap.className = "tile-image";
+            const pathsToTry = (p.images && p.images.length) ? p.images.map(px => px.replace(/\.(jpg|jpeg|png|webp|gif)$/i, "")) : (p.thumbnail ? [p.thumbnail.replace(/\.(jpg|jpeg|png|webp|gif)$/i, "")] : []);
+            if (pathsToTry.length && typeof window.loadImageWithFallback === "function") {
+                const img = document.createElement("img");
+                img.alt = p.title;
+                let idx = 0;
+                function tryNext() {
+                    if (idx >= pathsToTry.length) return;
+                    window.loadImageWithFallback(pathsToTry[idx++], img, tryNext, null);
+                }
+                tryNext();
+                imgWrap.appendChild(img);
+            }
+            tile.appendChild(imgWrap);
 
             const inner = document.createElement("div");
             inner.className = "tile-inner";
@@ -214,10 +235,30 @@
 
             const thumb = document.createElement("div");
             thumb.className = "project-thumb";
-            const t = document.createElement("div");
-            t.className = "thumb-title";
-            t.textContent = p.title;
-            thumb.appendChild(t);
+            const artworksToTry = (p.artworks || []).filter(a => a.images && a.images.length);
+            const selectedFirst = [...artworksToTry].sort((a, b) => (b.selectedWork ? 1 : 0) - (a.selectedWork ? 1 : 0));
+            if (selectedFirst.length && typeof window.loadImageWithFallback === "function") {
+                const img = document.createElement("img");
+                img.alt = p.title;
+                img.className = "project-thumb-img";
+                let artIdx = 0, pathIdx = 0;
+                function tryNextPath() {
+                    if (artIdx >= selectedFirst.length) return;
+                    const art = selectedFirst[artIdx];
+                    const paths = art.images.map(px => px.replace(/\.(jpg|jpeg|png|webp|gif)$/i, ""));
+                    if (pathIdx >= paths.length) {
+                        pathIdx = 0;
+                        artIdx++;
+                        return tryNextPath();
+                    }
+                    window.loadImageWithFallback(paths[pathIdx], img, () => {
+                        pathIdx++;
+                        tryNextPath();
+                    }, null);
+                }
+                tryNextPath();
+                thumb.appendChild(img);
+            }
 
             const main = document.createElement("div");
             main.className = "project-main";
@@ -325,7 +366,7 @@
             state.search = "";
             state.sort = "featured";
             searchEl.value = "";
-            sortEl.value = "featured";
+            sortEl.value = "selected";
             renderChips();
             renderAll();
         });

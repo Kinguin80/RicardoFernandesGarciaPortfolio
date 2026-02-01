@@ -1401,18 +1401,13 @@ function assignBrushstrokes() {
     // Select all elements that should have brushstroke backgrounds (excluding home page)
     // Note: series-artwork-title and tags in series/artwork pages should NOT have brushstrokes
     const selectors = [
-        '.chip',
-        '.control input',
-        '.control select',
-        '.btn-clear',
         '.bento-tile',
         '.tag:not(.series-artwork-tags .tag):not(.artwork-tags .tag)', // Exclude tags in series/artwork pages
         '.project-item',
         '.back-button',
         '.artwork-thumbnail',
         '.nav-arrow',
-        '.project-thumb',
-        '.works-controls'
+        '.project-thumb'
     ];
     
     selectors.forEach(selector => {
