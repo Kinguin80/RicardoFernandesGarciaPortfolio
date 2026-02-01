@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-sheets-sync",
+  "version": "1.0.0",
+  "description": "Scripts to sync Google Sheets data with portfolio website",
+  "scripts": {
+    "fetch": "node fetch-sheets-simple.js",
+    "fetch:simple": "node fetch-sheets-simple.js"
+  },
+  "keywords": [
+    "google-sheets",
+    "portfolio",
+    "sync"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,2067 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    background-color: #f5f5f0;
+    color: #3b3b3c;
+    overflow-x: hidden;
+}
+
+/* Notebook Container */
+.notebook-container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Left Navigation */
+.left-nav {
+    position: fixed;
+    left: -5vw; /* Moved 5% to the left */
+    top: 0;
+    height: 100vh;
+    width: calc(200px + 5vw); /* Increase width to compensate for left offset */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Changed from center to flex-start */
+    padding: 2rem 0;
+    z-index: 100;
+}
+
+.nav-holes {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    align-items: center;
+    width: auto;
+    /* Center buttons between left edge (0) and VLine (200px - 5vw) */
+    /* Position: 5vw (to account for container offset) + half the distance to VLine */
+    margin-left: calc(5vw + (200px - 5vw) / 2);
+    transform: translateX(-50%); /* Center the buttons on that point */
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-button:hover {
+    transform: scale(1.05);
+}
+
+.nav-button.active .notebook-hole {
+    opacity: 1;
+}
+
+.notebook-hole {
+    width: 60px;
+    height: 60px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.nav-label {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #3b3b3c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.vline-container {
+    position: fixed;
+    left: calc(200px - 5vw); /* Moved 5% to the left */
+    top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    width: 35px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: visible; /* Changed from hidden to visible to ensure full height */
+    z-index: 50;
+    pointer-events: none;
+}
+
+.vline {
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    opacity: 0.8;
+}
+
+/* Main Content Area */
+.main-content {
+    position: fixed;
+    left: calc(235px - 5vw); /* Start AFTER nav (200px) + VLine (35px), moved 5% to the left */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 100vh;
+    background-color: transparent;
+    border: none;
+    margin: 1rem 1rem 1rem 0;
+    padding: 3rem 4rem;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+/* Horizontal Lines Background - Full viewport coverage */
+.hlines-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.8s ease-out;
+    /* Create repeating pattern: 9 different line styles repeating every 900px */
+    background-image: 
+        url('assets/HLine-14.svg'),
+        url('assets/HLine-15.svg'),
+        url('assets/HLine-16.svg'),
+        url('assets/HLine-17.svg'),
+        url('assets/HLine-18.svg'),
+        url('assets/HLine-19.svg'),
+        url('assets/HLine-20.svg'),
+        url('assets/HLine-21.svg'),
+        url('assets/HLine-22.svg');
+    /* Set background size to 900px height (9 lines × 100px) so the pattern repeats */
+    background-size: 100% 900px;
+    /* Position each line at 100px intervals within the 900px pattern */
+    background-position: 
+        0 0,
+        0 100px,
+        0 200px,
+        0 300px,
+        0 400px,
+        0 500px,
+        0 600px,
+        0 700px,
+        0 800px;
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    /* Repeat the 900px pattern vertically infinitely */
+    background-repeat: repeat-y;
+}
+
+/* Fade out lines on series and artwork pages */
+body.series-page .hlines-background,
+body.artwork-page .hlines-background,
+body:has(#series.active) .hlines-background,
+body:has(#artwork.active) .hlines-background {
+    opacity: 0;
+}
+
+/* Page Styles */
+.page {
+    display: none;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-title {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    margin-left: 0;
+    padding-left: 0;
+    color: #3b3b3c;
+    position: relative;
+    left: 0;
+}
+
+/* Title and back button layout for series and artwork pages */
+#series,
+#artwork {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header container for title and button on same line */
+#series .page-title,
+#artwork .page-title {
+    display: inline-block;
+    margin-right: auto;
+}
+
+#series .title-header,
+#artwork .title-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 0.05rem;
+    position: relative;
+}
+
+/* Ensure pages are properly hidden when not active */
+.page:not(.active) {
+    display: none !important;
+}
+
+#series .page-title,
+#artwork .page-title {
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-left: 0;
+    margin-top: 0;
+    padding-top: 0;
+    margin-right: 1rem;
+}
+
+.title-line {
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem; /* Reduced from 2rem */
+    opacity: 0.35;
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+}
+
+#series .back-button,
+#artwork .back-button {
+    position: relative;
+    margin-bottom: 0;
+    margin-left: auto;
+    width: auto;
+    min-width: auto;
+    max-width: fit-content;
+}
+
+.page-content {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-left: 0;
+    padding-left: 0;
+    position: relative;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Home Page Carousel */
+.works-carousel-container {
+    width: 100%;
+    margin: 2rem 0;
+    border: 2px solid #3b3b3c;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.works-carousel-container:first-of-type {
+    margin-top: 0; /* Remove top margin from first carousel */
+}
+
+.works-carousel-container:last-of-type {
+    margin-bottom: 0; /* Remove bottom margin from last carousel */
+}
+
+/* Offset second carousel to create staggered alignment */
+#homeCarousel2 {
+    /* Offset by half a typical item width for staggered look */
+    margin-left: 0.05rem;
+}
+
+/* Spacing between items: use high specificity so nothing overrides. Change gap here to adjust distance. */
+.works-carousel-container .works-carousel {
+    display: flex;
+    gap: 4rem !important; /* ONLY place that controls space between carousel items */
+    animation: scrollRight 30s linear infinite;
+    width: fit-content;
+}
+
+/* Items shrink to image width so gap is the real space between artworks (not empty 420px boxes) */
+.works-carousel-container .carousel-item {
+    flex-shrink: 0;
+    width: auto !important;
+    min-width: 150px;
+    max-width: 420px;
+    height: 260px;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-placeholder {
+    height: 200px; /* Fixed height - keep as original */
+    width: auto; /* Width adapts to image aspect ratio */
+    max-width: 380px; /* Maximum width to fit within 420px container with padding */
+    min-width: 150px; /* Minimum width for very narrow images */
+    border: 2px solid #3b3b3c;
+    border-radius: 4px;
+    background: linear-gradient(135deg, rgba(59, 59, 60, 0.1) 0%, rgba(59, 59, 60, 0.2) 100%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #3b3b3c;
+    text-align: center;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.carousel-placeholder img {
+    width: auto;
+    height: 200px; /* Fixed height to match placeholder */
+    max-width: 100%;
+    display: block;
+    object-fit: contain; /* Show full image without cropping */
+    transition: opacity 0.3s ease-in;
+}
+
+/* Penguin animations */
+.penguin {
+    position: absolute;
+    bottom: 0;
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;
+    background-image: url('assets/Penguinwalk-1.png');
+}
+
+.penguin-left {
+    /* Position at left edge of image - will be adjusted by JavaScript based on actual image size */
+    left: 0;
+    transform: scaleX(-1); /* Flip horizontally */
+}
+
+.penguin-right {
+    /* Position at right edge of image - will be adjusted by JavaScript based on actual image size */
+    right: 0;
+}
+
+/* CSS animation disabled - JavaScript controls the animation instead */
+
+@keyframes scrollRight {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pause animation on hover */
+.works-carousel-container:hover .works-carousel {
+    animation-play-state: paused;
+}
+
+/* Home carousel footer - Quick Mini Portfolio button */
+.home-carousel-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+}
+
+.quick-mini-portfolio-btn {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #3b3b3c;
+    background: transparent;
+    border: 2px solid #3b3b3c;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.quick-mini-portfolio-btn:hover {
+    background-color: #3b3b3c;
+    color: #f5f5f0;
+}
+
+/* Quick Mini Portfolio Overlay */
+.mini-portfolio-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.mini-portfolio-overlay.active {
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.mini-portfolio-overlay .mini-portfolio-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1c;
+    transform: translateX(100%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.mini-portfolio-overlay.active .mini-portfolio-panel {
+    transform: translateX(0);
+}
+
+/* White vertical line - same as vline */
+.mini-portfolio-vline {
+    position: absolute;
+    left: calc(200px - 5vw);
+    top: 0;
+    height: 100%;
+    width: 35px;
+    background-image: url('assets/VLine.svg');
+    background-size: contain;
+    background-repeat: repeat-y;
+    opacity: 0.6;
+    filter: brightness(0) invert(1);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* White horizontal lines - same pattern as hlines-background */
+.mini-portfolio-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.4;
+    pointer-events: none;
+    background-image: 
+        url('assets/HLine-14.svg'),
+        url('assets/HLine-15.svg'),
+        url('assets/HLine-16.svg'),
+        url('assets/HLine-17.svg'),
+        url('assets/HLine-18.svg'),
+        url('assets/HLine-19.svg'),
+        url('assets/HLine-20.svg'),
+        url('assets/HLine-21.svg'),
+        url('assets/HLine-22.svg');
+    background-size: 100% 900px;
+    background-position: 
+        0 0,
+        0 100px,
+        0 200px,
+        0 300px,
+        0 400px,
+        0 500px,
+        0 600px,
+        0 700px,
+        0 800px;
+    background-repeat: repeat-y;
+    /* Invert to white */
+    filter: brightness(0) invert(1);
+}
+
+.mini-portfolio-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 4rem 4rem calc(250px - 5vw + 3rem);
+}
+
+.mini-portfolio-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+    line-height: 1;
+    color: #fff;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    z-index: 10;
+}
+
+.mini-portfolio-close:hover {
+    background-color: #fff;
+    color: #1a1a1c;
+}
+
+/* When mini portfolio is open: nav stays on top and visible in white */
+body.mini-portfolio-open .left-nav {
+    z-index: 1001;
+}
+
+body.mini-portfolio-open .left-nav .nav-label {
+    color: #fff;
+}
+
+body.mini-portfolio-open .left-nav .notebook-hole path {
+    fill: #fff;
+}
+
+.mini-portfolio-images {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
+    height: 70vh;
+    max-height: 80vh;
+    margin: 0 auto;
+}
+
+.mini-portfolio-images .mini-portfolio-img-wrap {
+    flex: 0 1 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-portfolio-images .mini-portfolio-img-wrap img {
+    max-height: 100%;
+    max-width: 30vw;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Responsive: smaller left padding on narrow screens */
+@media (max-width: 900px) {
+    .mini-portfolio-content {
+        padding-left: 4rem;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .left-nav {
+        width: calc(120px + 5vw); /* Increase width to compensate for left offset */
+    }
+
+    .nav-holes {
+        gap: 2rem;
+        /* Center buttons between left edge (0) and VLine (120px - 5vw) for tablet */
+        margin-left: calc(5vw + (120px - 5vw) / 2);
+        transform: translateX(-50%);
+    }
+
+    .notebook-hole {
+        width: 40px;
+        height: 40px;
+    }
+
+    .nav-label {
+        font-size: 0.7rem;
+    }
+
+    .vline-container {
+        left: calc(120px - 5vw); /* Moved 5% to the left */
+        width: 25px;
+        height: 100vh; /* Ensure full height */
+        min-height: 100vh;
+    }
+
+    .vline {
+        min-height: 100vh;
+        height: 100%;
+    }
+
+    .main-content {
+        left: calc(145px - 5vw); /* 120px (nav) + 25px (VLine), moved 5% to the left */
+        padding: 2rem 1.5rem;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .page-content {
+        font-size: 1rem;
+    }
+
+    .hlines-background {
+        /* Smaller spacing for mobile - 50px per line instead of 100px */
+        background-size: 100% 450px; /* 9 lines × 50px = 450px */
+        background-position: 
+            0 0,
+            0 50px,
+            0 100px,
+            0 150px,
+            0 200px,
+            0 250px,
+            0 300px,
+            0 350px,
+            0 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .left-nav {
+        width: calc(80px + 5vw); /* Increase width to compensate for left offset */
+        padding: 0.5rem 0;
+    }
+
+    .nav-holes {
+        gap: 1.5rem;
+        /* Center buttons between left edge (0) and VLine (80px - 5vw) for mobile */
+        margin-left: calc(5vw + (80px - 5vw) / 2);
+        transform: translateX(-50%);
+    }
+
+    .notebook-hole {
+        width: 30px;
+        height: 30px;
+    }
+
+    .nav-label {
+        font-size: 0.6rem;
+    }
+
+    .vline-container {
+        left: calc(80px - 5vw); /* Moved 5% to the left */
+        width: 20px;
+        height: 100vh; /* Ensure full height */
+        min-height: 100vh;
+    }
+
+    .vline {
+        min-height: 100vh;
+        height: 100%;
+    }
+
+    .main-content {
+        left: calc(100px - 5vw); /* 80px (nav) + 20px (VLine), moved 5% to the left */
+        padding: 1.5rem 1rem;
+        margin: 0.25rem 0.25rem 0.25rem 0;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .page-content {
+        font-size: 0.9rem;
+    }
+
+    .hlines-background {
+        /* Even smaller spacing for very small screens - 40px per line */
+        background-size: 100% 360px; /* 9 lines × 40px = 360px */
+        background-position: 
+            0 0,
+            0 40px,
+            0 80px,
+            0 120px,
+            0 160px,
+            0 200px,
+            0 240px,
+            0 280px,
+            0 320px;
+    }
+}
+
+/* SVG Tinting - Additional filter for any remaining white SVGs */
+svg path {
+    fill: #3b3b3c;
+}
+
+/* Global rule: All text inside elements with brushstroke should be white */
+.has-brushstroke,
+.has-brushstroke *:not(img):not(svg):not(path):not(canvas) {
+    color: #ffffff !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* More specific overrides for common text elements */
+.has-brushstroke h1,
+.has-brushstroke h2,
+.has-brushstroke h3,
+.has-brushstroke h4,
+.has-brushstroke h5,
+.has-brushstroke h6,
+.has-brushstroke p,
+.has-brushstroke span,
+.has-brushstroke div,
+.has-brushstroke a,
+.has-brushstroke label,
+.has-brushstroke input,
+.has-brushstroke select,
+.has-brushstroke button {
+    color: #ffffff !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Apply roughen filter to black boxes - this is the default for all brushstroke elements */
+.has-brushstroke {
+    background-color: #3b3b3c !important; /* Black background */
+    background-image: none !important;
+    position: relative;
+    isolation: isolate;
+    filter: url(#roughen-filter); /* Apply roughen effect to the box - this distorts edges */
+    /* Force hardware acceleration */
+    transform: translateZ(0);
+    will-change: filter;
+}
+
+/* Text content - try to minimize distortion by creating new stacking context */
+.has-brushstroke > * {
+    position: relative;
+    z-index: 1;
+    /* Create isolated stacking context - may help reduce filter effects on text */
+    isolation: isolate;
+    transform: translateZ(0);
+}
+
+/* Ensure all content inside brushstroke elements is above the background */
+.has-brushstroke > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Works Page Styles */
+.works-controls {
+    border: none;
+    border-radius: 8px;
+    background-color: transparent;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.works-controls.has-brushstroke {
+    position: relative;
+    color: #ffffff;
+}
+
+.works-controls.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.works-controls.has-brushstroke > * {
+    position: relative;
+    z-index: 1;
+}
+
+.works-controls.has-brushstroke * {
+    color: #ffffff !important;
+}
+
+.works-controls.has-brushstroke input,
+.works-controls.has-brushstroke select {
+    filter: none; /* Reset filter for inputs/selects inside */
+}
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.chip {
+    border: none;
+    background-color: transparent;
+    color: #ffffff !important;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+}
+
+.chip.has-brushstroke {
+    position: relative;
+}
+
+.chip.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.chip.has-brushstroke {
+    position: relative;
+    z-index: 1;
+}
+
+.chip:hover {
+    background-color: rgba(59, 59, 60, 0.1);
+}
+
+.chip[aria-pressed="true"] {
+    background-color: rgba(59, 59, 60, 0.3);
+    color: #ffffff !important;
+}
+
+.control-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.control {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.control span {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.works-controls:not(.has-brushstroke) .control span {
+    color: #3b3b3c;
+}
+
+.control input,
+.control select {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #ffffff !important;
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.control input.has-brushstroke,
+.control select.has-brushstroke {
+    position: relative;
+}
+
+.control input.has-brushstroke::before,
+.control select.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.control input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.control select option {
+    background-color: #3b3b3c;
+    color: #ffffff;
+}
+
+.control input:focus,
+.control select:focus {
+    box-shadow: 0 0 0 2px rgba(59, 59, 60, 0.1);
+}
+
+.btn-clear {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: transparent;
+    color: #ffffff !important;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-clear.has-brushstroke {
+    position: relative;
+}
+
+.btn-clear.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.btn-clear:hover {
+    opacity: 0.8;
+}
+
+.works-divider {
+    height: 2px;
+    background-color: #3b3b3c;
+    margin: 2.5rem 0;
+    opacity: 0.3;
+}
+
+.works-section {
+    margin-bottom: 3rem;
+}
+
+.section-heading {
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 2rem;
+    color: #3b3b3c;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    color: #3b3b3c;
+    opacity: 0.7;
+    font-size: 0.95rem;
+}
+
+/* Bento Grid - Selected Works */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.bento-tile {
+    position: relative;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    min-height: 180px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+.bento-tile.has-brushstroke {
+    position: relative;
+    color: #ffffff;
+}
+
+.bento-tile.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.bento-tile.has-brushstroke > * {
+    position: relative;
+    z-index: 1;
+    color: #ffffff !important;
+}
+
+.bento-tile.has-brushstroke,
+.bento-tile.has-brushstroke *,
+.bento-tile.has-brushstroke .tile-title,
+.bento-tile.has-brushstroke .tile-meta,
+.bento-tile.has-brushstroke .tag {
+    color: #ffffff !important;
+}
+
+.bento-tile.has-brushstroke img {
+    filter: none; /* Reset filter for images inside */
+}
+
+.bento-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 59, 60, 0.2);
+}
+
+.bento-tile.size-l {
+    grid-column: span 7;
+    min-height: 280px;
+}
+
+.bento-tile.size-m {
+    grid-column: span 5;
+    min-height: 220px;
+}
+
+.bento-tile.size-s {
+    grid-column: span 4;
+    min-height: 180px;
+}
+
+.bento-tile.size-xs {
+    grid-column: span 3;
+    min-height: 160px;
+}
+
+.tile-inner {
+    position: relative;
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    z-index: 1;
+}
+
+.tile-title {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.bento-tile:not(.has-brushstroke) .tile-title {
+    color: #3b3b3c;
+}
+
+.tile-meta {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.bento-tile:not(.has-brushstroke) .tile-meta {
+    color: #3b3b3c;
+}
+
+.tag {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    border: none;
+    background-color: transparent;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+}
+
+.tag.has-brushstroke {
+    position: relative;
+}
+
+.tag.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.tag.has-brushstroke {
+    position: relative;
+    z-index: 1;
+}
+
+/* Projects Catalog */
+.projects-catalog {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.project-item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-item.has-brushstroke {
+    position: relative;
+    color: #ffffff;
+}
+
+.project-item.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.project-item.has-brushstroke > * {
+    position: relative;
+    z-index: 1;
+}
+
+.project-item.has-brushstroke,
+.project-item.has-brushstroke *,
+.project-item.has-brushstroke .project-title,
+.project-item.has-brushstroke .project-sub,
+.project-item.has-brushstroke .project-blurb,
+.project-item.has-brushstroke .thumb-title,
+.project-item.has-brushstroke .tag {
+    color: #ffffff !important;
+}
+
+.project-item.has-brushstroke img {
+    filter: none; /* Reset filter for images inside */
+}
+
+.project-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 59, 60, 0.2);
+}
+
+.project-thumb {
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+    min-height: 140px;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+}
+
+.project-thumb.has-brushstroke {
+    position: relative;
+}
+
+.project-thumb.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.project-thumb.has-brushstroke > * {
+    position: relative;
+    z-index: 1;
+}
+
+.project-thumb.has-brushstroke .thumb-title {
+    color: #ffffff !important;
+}
+
+.thumb-title {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.2rem;
+}
+
+.project-thumb:not(.has-brushstroke) .thumb-title {
+    color: #3b3b3c;
+}
+
+.project-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-title {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.project-item:not(.has-brushstroke) .project-title {
+    color: #3b3b3c;
+}
+
+.project-sub {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.project-item:not(.has-brushstroke) .project-sub {
+    color: #3b3b3c;
+}
+
+.project-blurb {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0.5rem 0 0 0;
+    max-width: 70ch;
+}
+
+.project-item:not(.has-brushstroke) .project-blurb {
+    color: #3b3b3c;
+}
+
+.item-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+    border: 2px dashed #3b3b3c;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.empty-state h3 {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: #3b3b3c;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    color: #3b3b3c;
+    opacity: 0.7;
+}
+
+/* Responsive Works Page */
+@media (max-width: 768px) {
+    .bento-tile.size-l,
+    .bento-tile.size-m,
+    .bento-tile.size-s,
+    .bento-tile.size-xs {
+        grid-column: span 12;
+    }
+
+    .project-item {
+        grid-template-columns: 1fr;
+    }
+
+    .project-thumb {
+        min-height: 120px;
+    }
+
+    .control-row {
+        flex-direction: column;
+    }
+
+    .control {
+        min-width: 100%;
+    }
+}
+
+/* Series and Artwork Pages */
+.back-button {
+    margin-bottom: 2rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: transparent;
+    color: #ffffff !important;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+    width: auto;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.back-button.has-brushstroke {
+    position: relative;
+}
+
+.back-button.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.back-button:hover {
+    opacity: 0.8;
+}
+
+/* Series Page */
+.series-info {
+    margin-bottom: 2rem; /* Reduced from 3rem */
+    margin-top: 0.5rem; /* Reduced top margin */
+}
+
+.series-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.series-years {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.series-info:not(.has-brushstroke) .series-years {
+    color: #3b3b3c;
+}
+
+.series-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.series-blurb {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 1rem 0;
+    max-width: 70ch;
+}
+
+.series-info:not(.has-brushstroke) .series-blurb {
+    color: #3b3b3c;
+}
+
+.series-statement {
+    margin-top: 1.5rem;
+}
+
+.series-statement p {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.8;
+    max-width: 70ch;
+}
+
+.series-info:not(.has-brushstroke) .series-statement p {
+    color: #3b3b3c;
+}
+
+/* Series artworks list - grid layout with natural aspect ratios */
+.series-artworks-list {
+    /* Masonry layout - will be positioned by JavaScript */
+    position: relative;
+    margin: 3rem 0;
+}
+
+.series-artworks-list::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+/* Responsive: reduce columns on smaller screens while maintaining order */
+@media (max-width: 1200px) {
+    .series-artworks-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .series-artworks-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .series-artworks-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+.series-artwork-item {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    box-sizing: border-box;
+    opacity: 1 !important; /* Ensure items are always visible */
+    visibility: visible !important;
+}
+
+.series-artwork-item:hover {
+    opacity: 0.85;
+}
+
+.series-artwork-image {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    height: auto; /* Let image determine height */
+}
+
+.series-artwork-img {
+    width: 100%;
+    max-width: 400px;
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    transition: opacity 0.3s ease-in;
+    object-fit: contain; /* Ensure image maintains aspect ratio */
+    opacity: 1 !important; /* Ensure images are always visible */
+}
+
+.series-artwork-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem; /* Reduced from 0.25rem */
+    width: 100%;
+    max-width: 400px;
+    align-self: center; /* Center align to match image */
+}
+
+.series-artwork-title {
+    font-family: 'Crimson Text', serif; /* Use serif for higher hierarchy */
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.5rem; /* Larger size for hierarchy */
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    color: #3b3b3c !important; /* Black text, no background */
+    text-transform: none; /* No uppercase */
+    letter-spacing: normal;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 0 0.25rem 0; /* Reduced from 0.75rem */
+    line-height: 1.2; /* Tighter leading */
+    box-sizing: border-box;
+}
+
+.series-artwork-meta {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin: 0 0 0.15rem 0; /* Reduced spacing between meta items */
+    line-height: 1.3; /* Tighter leading */
+    color: #3b3b3c;
+}
+
+.series-artwork-item:not(:has(.has-brushstroke)) .series-artwork-meta {
+    color: #3b3b3c;
+}
+
+.series-artwork-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.15rem; /* Reduced from 0.25rem */
+}
+
+/* Remove black background from tags in series/artwork pages */
+.series-artwork-tags .tag,
+.artwork-tags .tag {
+    background-color: transparent !important;
+    color: #3b3b3c !important;
+    border: none;
+    padding: 0;
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.series-artwork-tags .tag.has-brushstroke,
+.artwork-tags .tag.has-brushstroke {
+    filter: none !important;
+    background-color: transparent !important;
+}
+
+.series-artwork-tags .tag.has-brushstroke::before,
+.artwork-tags .tag.has-brushstroke::before {
+    display: none;
+}
+
+/* Legacy grid styles (kept for backwards compatibility) */
+.artworks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.artwork-thumbnail {
+    position: relative;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 3 / 2;
+    background-color: transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.artwork-thumbnail.has-brushstroke {
+    position: relative;
+}
+
+.artwork-thumbnail.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.artwork-thumbnail.has-brushstroke img {
+    filter: none;
+}
+
+.artwork-thumbnail:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(59, 59, 60, 0.3);
+}
+
+.artwork-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.3s ease-in;
+}
+
+/* Image loading states */
+img.image-loading {
+    opacity: 0;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+}
+
+img.image-loaded {
+    opacity: 1;
+}
+
+img.image-error {
+    opacity: 0;
+}
+
+@keyframes loading-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.artwork-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(59, 59, 60, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.artwork-thumbnail:hover .artwork-overlay {
+    opacity: 1;
+}
+
+.artwork-overlay span {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.series-process,
+.series-context {
+    margin-top: 3rem;
+}
+
+.series-process h3,
+.series-context h3 {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: #3b3b3c;
+    margin-bottom: 1rem;
+}
+
+.series-process ul,
+.series-context ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.series-process li,
+.series-context li {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #3b3b3c;
+    line-height: 1.8;
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.series-process li::before,
+.series-context li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #3b3b3c;
+}
+
+.no-images {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #3b3b3c;
+    opacity: 0.7;
+    text-align: center;
+    padding: 3rem;
+    border: 2px dashed #3b3b3c;
+    border-radius: 4px;
+}
+
+/* Artwork Page - Harvard Art Museums style */
+.artwork-viewer {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3rem;
+    align-items: start;
+}
+
+.artwork-image-container {
+    position: relative;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    background-color: transparent;
+}
+
+.artwork-image-link {
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.artwork-image-link .artwork-image {
+    cursor: pointer;
+}
+
+.artwork-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease-in;
+    margin-bottom: 1rem;
+}
+
+/* Thumbnail gallery for multiple images */
+.artwork-thumbnails {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.artwork-thumb {
+    width: clamp(40px, 5vw, 80px);
+    height: clamp(40px, 5vw, 80px);
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.artwork-thumb:hover {
+    border-color: rgba(59, 59, 60, 0.3);
+    transform: scale(1.05);
+}
+
+.artwork-thumb.active {
+    border-color: #3b3b3c;
+    border-width: 2px;
+}
+
+.artwork-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Prevent GIF animation in thumbnails */
+.artwork-thumb img[src$=".gif"],
+.artwork-thumb img[src$=".GIF"] {
+    animation: none !important;
+    /* Extract first frame by using object-position */
+    object-position: 0 0;
+}
+
+/* Responsive: stack on smaller screens */
+@media (max-width: 968px) {
+    .artwork-viewer {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* Image loading animation - add after existing styles */
+@keyframes loading-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.artwork-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(59, 59, 60, 0.2);
+    background-color: transparent;
+}
+
+.nav-arrow {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: transparent;
+    color: #ffffff !important;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+}
+
+.nav-arrow.has-brushstroke {
+    position: relative;
+}
+
+.nav-arrow.has-brushstroke::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    right: -10%;
+    bottom: -10%;
+    background-image: var(--brushstroke-bg);
+    background-size: var(--brushstroke-size, contain);
+    background-repeat: var(--brushstroke-repeat, no-repeat);
+    background-position: var(--brushstroke-position, center);
+    filter: brightness(0) saturate(100%) invert(23%) sepia(2%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(95%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.nav-arrow:hover {
+    background-color: #3b3b3c;
+    color: #ffffff;
+}
+
+.image-counter {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #3b3b3c;
+}
+
+.artwork-info {
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    position: sticky;
+    top: 2rem;
+    align-self: start;
+}
+
+/* Title value gets special styling */
+.artwork-title-value {
+    font-family: 'Crimson Text', serif !important;
+    font-weight: 700 !important;
+    font-style: italic !important;
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.5rem;
+}
+
+/* Metadata list - Harvard Art Museums style */
+.artwork-metadata {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.metadata-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.metadata-label {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(59, 59, 60, 0.6); /* Lighter gray for labels */
+    margin: 0;
+    line-height: 1.3;
+}
+
+.metadata-value {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #3b3b3c; /* Dark black for values */
+    margin: 0;
+    line-height: 1.5;
+}
+
+.metadata-value a {
+    color: #3b3b3c;
+    text-decoration: underline;
+    text-decoration-color: rgba(59, 59, 60, 0.3);
+    transition: text-decoration-color 0.2s ease;
+}
+
+.metadata-value a:hover {
+    text-decoration-color: #3b3b3c;
+}
+
+.artwork-description {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(59, 59, 60, 0.2);
+}
+
+.artwork-statement {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: #3b3b3c;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 70ch;
+}
+
+/* Responsive Series and Artwork Pages */
+@media (max-width: 768px) {
+    .artworks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .artwork-viewer {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .artwork-info {
+        position: static;
+    }
+
+    .artwork-navigation {
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    .nav-arrow {
+        width: 100%;
+    }
+}
+

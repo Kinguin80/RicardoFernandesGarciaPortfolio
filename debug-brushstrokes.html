@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Brushstrokes</title>
+    <style>
+        body { padding: 20px; font-family: monospace; }
+        .test-box {
+            width: 300px;
+            height: 100px;
+            margin: 20px 0;
+            padding: 10px;
+            border: 2px solid #3b3b3c;
+        }
+        .has-brushstroke,
+        .has-brushstroke *:not(img):not(svg):not(path):not(canvas) {
+            color: #ffffff !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Brushstroke Debug Test</h1>
+    <p>Open browser console and check:</p>
+    <ol>
+        <li>Are elements getting the 'has-brushstroke' class?</li>
+        <li>Are inline styles being set?</li>
+        <li>What's the computed color value?</li>
+    </ol>
+    
+    <div class="test-box" id="test1">
+        <span>This text should be white</span>
+    </div>
+    
+    <script>
+        // Test the brushstroke assignment
+        const testBox = document.getElementById('test1');
+        testBox.style.backgroundImage = "url('assets/brushstroke-30.svg')";
+        testBox.style.backgroundSize = 'cover';
+        testBox.classList.add('has-brushstroke');
+        testBox.style.color = '#ffffff';
+        
+        const span = testBox.querySelector('span');
+        span.style.setProperty('color', '#ffffff', 'important');
+        
+        // Check computed styles
+        setTimeout(() => {
+            const computed = window.getComputedStyle(span);
+            console.log('Span color:', computed.color);
+            console.log('Span has class:', span.classList.contains('has-brushstroke'));
+            console.log('Parent has class:', testBox.classList.contains('has-brushstroke'));
+        }, 100);
+    </script>
+</body>
+</html>
