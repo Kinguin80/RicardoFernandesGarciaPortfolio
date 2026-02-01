@@ -73,6 +73,10 @@ body {
     transition: opacity 0.3s ease;
 }
 
+.nav-button.nav-hidden {
+    display: none;
+}
+
 .nav-label {
     font-family: 'Arsenal', sans-serif;
     font-weight: 700;
@@ -160,11 +164,15 @@ body {
     background-repeat: repeat-y;
 }
 
-/* Fade out lines on series and artwork pages */
+/* Fade out lines on series, artwork, CV, and contact pages */
 body.series-page .hlines-background,
 body.artwork-page .hlines-background,
+body.cv-page .hlines-background,
+body.contact-page .hlines-background,
 body:has(#series.active) .hlines-background,
-body:has(#artwork.active) .hlines-background {
+body:has(#artwork.active) .hlines-background,
+body:has(#cv.active) .hlines-background,
+body:has(#contact.active) .hlines-background {
     opacity: 0;
 }
 
@@ -263,6 +271,235 @@ body:has(#artwork.active) .hlines-background {
     left: 0;
     width: 100%;
     box-sizing: border-box;
+}
+
+/* CV Page */
+.cv-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.cv-tab {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #3b3b3c;
+    background: transparent;
+    border: 2px solid #3b3b3c;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cv-tab:hover {
+    background-color: #3b3b3c;
+    color: #f5f5f0;
+}
+
+.cv-tab[aria-pressed="true"] {
+    background-color: #3b3b3c;
+    color: #f5f5f0;
+}
+
+.cv-panel {
+    display: none;
+    max-width: 65ch;
+}
+
+.cv-panel.active {
+    display: block;
+}
+
+.cv-contact {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: #3b3b3c;
+    opacity: 0.9;
+}
+
+.cv-section {
+    margin-bottom: 2rem;
+}
+
+.cv-heading {
+    font-family: 'Crimson Text', serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: #3b3b3c;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid rgba(59, 59, 60, 0.3);
+}
+
+.cv-org {
+    font-weight: 400;
+    color: #3b3b3c;
+    margin: 0.75rem 0 0.25rem 0;
+}
+
+.cv-role {
+    font-size: 0.95rem;
+    color: #3b3b3c;
+    opacity: 0.85;
+    margin: 0.25rem 0;
+}
+
+.cv-detail {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #3b3b3c;
+    margin: 0.25rem 0;
+    opacity: 0.95;
+}
+
+.cv-sub {
+    font-weight: 400;
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.cv-list {
+    margin: 0.5rem 0 0 1.25rem;
+    padding: 0;
+}
+
+.cv-list li {
+    margin-bottom: 0.35rem;
+    line-height: 1.5;
+}
+
+/* About Page */
+.about-content {
+    max-width: 850px;
+}
+
+.about-box {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+    padding: 2rem 2.5rem;
+}
+
+.about-image {
+    flex-shrink: 0;
+    width: 220px;
+}
+
+.about-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+}
+
+.about-text {
+    flex: 1;
+}
+
+.about-text p {
+    font-size: 1.35rem;
+    line-height: 1.8;
+}
+
+.about-box.has-brushstroke .about-text p {
+    color: #ffffff;
+}
+
+@media (max-width: 640px) {
+    .about-box {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+    .about-image {
+        width: 180px;
+    }
+    .about-text p {
+        font-size: 1.2rem;
+    }
+}
+
+/* Contact Page */
+.contact-intro {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: #3b3b3c;
+    opacity: 0.9;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 480px;
+}
+
+.contact-label {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #3b3b3c;
+}
+
+.contact-input,
+.contact-textarea {
+    font-family: 'Palanquin', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #3b3b3c;
+    border-radius: 4px;
+    background: transparent;
+    color: #3b3b3c;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.contact-input:hover,
+.contact-textarea:hover {
+    background-color: rgba(59, 59, 60, 0.03);
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+    background-color: rgba(59, 59, 60, 0.03);
+}
+
+.contact-input::placeholder,
+.contact-textarea::placeholder {
+    color: rgba(59, 59, 60, 0.4);
+}
+
+.contact-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.contact-submit {
+    font-family: 'Arsenal', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #3b3b3c;
+    background: transparent;
+    border: 2px solid #3b3b3c;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.contact-submit:hover {
+    background-color: #3b3b3c;
+    color: #f5f5f0;
 }
 
 /* Home Page Carousel */

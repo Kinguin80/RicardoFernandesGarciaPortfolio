@@ -55,7 +55,7 @@
                     </svg>
                     <span class="nav-label">CV</span>
                 </button>
-                <button class="nav-button" data-page="contact">
+                <button class="nav-button nav-hidden" data-page="contact" aria-hidden="true">
                     <svg class="notebook-hole" viewBox="0 0 171.18 171.18" xmlns="http://www.w3.org/2000/svg">
                         <path fill="#3b3b3c" d="M78.23,40.51c.08.02.1.82.48.9,5.98,1.22,12.28.68,17.91.17.44-.04,3.28.34,3.66.47.58.21,2.2,3.62,2.9,3.73,1.49.25,3.27-1.21,3.42-1.1.07.06.18,1.07.78,1.66.74.73,2.45,1.47,2.77,2.15.43.89.05,2.16.34,2.64.44.72,3.6.32,4.6,1.11s.95,3.96,1.66,4.97c.54.77,1.42.86,1.84,1.47.76,1.1,1.01,3.41,1.56,4.14.4.53,1.52.42,2.24,1.14s1.08,2.23,1.62,3.17c.23.4,1.05.47,1.25,1.07.12.36.45,7.3.38,7.68-.07.41-1.08.31-1.13.69-.08.59.53,1.4.42,2.04s-1.46,2.55-.94,3.06c.1.1,1.06-.19,1.48.11.17.12,2.07,3.3,2.15,3.53.24.63-1.47,4.66-1.89,5.46-1.96,3.8-5.39,4.54-.67,9.12-3.97,1.24-.75,2.21-1.7,4.8-.06.16-2.05,2.19-2.3,2.37-.38.28-1.22.07-1.35.21-.41.45.25,2.19-.15,2.63-.14.15-1.04-.09-1.37.19-.89.73-3.31,4.02-4.02,4.46-3.8,2.37-9.57,4.6-11.62,9.52-.2.49.35,1.23.17,1.53-.26.42-5.44,2.34-6.19,2.34-2,0-2.04-2.79-4.6-2.22l.54,2.71-2.17-1.08c.54.87-.06,2.97-.92,3.27-2.66.91-1.73-2.23-2.38-2.72-.19-.14-1.14.42-1.64.25-.93-.32-1.7-1.19-2.79-1.55-1.02-.34-2.12.1-2.62-.11-1.03-.42-1.33-2.22-2.27-2.59-1.17-.46-2.51-.1-3.28-.39-.86-.32-3.58-2.19-4.89-2.82-.75-.36-2.31-.3-2.5-.49-.17-.17-.56-3.44-1.69-4.49-.62-.58-5.76-1.75-5.93-2.01-.18-.3-.74-4.67-.88-4.87-.54-.74-2.33-.62-3-1.32-.53-.55-2.63-5.38-3.31-6.5-.38-.63-1.34-.73-1.48-.97-.27-.44.56-2.71-.14-3.1-.54-.3-1.88.23-2.68-.3-.15-.1-1.75-2.82-1.82-3-.91-2.3-.71-6.17-1.1-8.22-.2-1.05-1.4-1.01-1.44-1.37-.11-1.11,1.07-2.34,1.16-3.75s-.76-2.86-.38-4.09c.26-.85,3.04-3.25,3.72-5.02.48-1.26.2-2.84.69-3.66.21-.36,3.54-2.8,3.56-3.07.05-.71-.56-1.53-.52-2.15.36-5.54,1.24-2.43,2.68-3.17.62-.32.85-1.49,1.49-1.96,1.64-1.21,3.17-.91,4.17-3.29.48-1.14.5-4.03,1.39-4.59s3.48-.16,4.56-.78c.64-.37.04-1.37.71-1.67,1.38-.62,4.38.18,4.53.01.25-.26-.39-3.01.23-3.84.47-.62,1.58-.3,2.04-.57,1.24-.71,2.75-2.47,4.68-1.93Z"/>
                     </svg>
@@ -177,21 +177,151 @@
             <div class="page" id="about">
                 <h1 class="page-title">About</h1>
                 <div class="page-content">
-                    <!-- About page content will go here -->
+                    <div class="about-content">
+                        <div class="about-box">
+                            <div class="about-image">
+                                <img src="assets/images/profilepicture.jpeg" alt="Ricardo Fernandes Garcia">
+                            </div>
+                            <div class="about-text">
+                                <p>Ricardo Fernandes Garcia is an artist and Harvard student currently studying what he likes to acronymize as HALFVS: half Art, Film, and Visual Studies (AFVS), and half History and Literature (H&L). His nationality is similarly constructed by two halves: he is Venezuelan-Portuguese, though he resides in the oven-like Orlando, FL—making him especially delighted to bask in Massachusetts's below-100°F weather.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="page" id="cv">
                 <h1 class="page-title">CV</h1>
                 <div class="page-content">
-                    <!-- CV page content will go here -->
+                    <div class="cv-tabs">
+                        <button type="button" class="cv-tab active" data-cv="artistic" aria-pressed="true">Artistic Resume</button>
+                        <button type="button" class="cv-tab" data-cv="resume" aria-pressed="false">Resume</button>
+                    </div>
+                    <div class="cv-panel active" id="cv-artistic">
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Education</h2>
+                            <p class="cv-org">Harvard University</p>
+                            <p class="cv-detail">A.B. joint degree in Art, Film, & Visual Studies and History & Literature; secondary in Computer Science</p>
+                            <p class="cv-detail">Expected May 2027</p>
+                            <p class="cv-sub">Relevant Coursework:</p>
+                            <ul class="cv-list">
+                                <li>AFVS 123R – Post Brush: Studio Course – Annette Lemieux</li>
+                                <li>AFVS 15AR – Silkscreen – Annette Lemieux</li>
+                                <li>AFVS 14 – Making Things [Breaking Things] – Katarina Burin</li>
+                                <li>GENED 1080 – How Music Works: Engineering the Acoustical World – Robert Wood</li>
+                                <li>AFVS 148 – Sleight of Hand Sleight of Mind: Creative Process and Photography – Sharon Harper</li>
+                                <li>COMPSCI 73 – Code, Data, and Art – Fernanda Viegas and Martin Wattenberg</li>
+                                <li>FYSEMR 51X – Changing Perspectives: the Science of Optics in the Visual Arts</li>
+                                <li>EMR 168 – Narrating the Border: Migration and Media</li>
+                            </ul>
+                        </section>
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Professional</h2>
+                            <p class="cv-org">Harvard Art Museums – Summer Humanities & Arts Research Fellow (2024)</p>
+                            <p class="cv-detail">Designed marketing & educational materials for museum initiatives, including a free citizenship course.</p>
+                            <p class="cv-org">Harvard Art Museums – Ho Family Student Guide (2024 - Present)</p>
+                            <p class="cv-detail">Developed and delivered public art tours, researching artwork and museum curation.</p>
+                            <p class="cv-org">Office for the Arts at Harvard – Student Ambassador (2024 - 2025)</p>
+                            <p class="cv-detail">Organize community and civic-oriented art events fostering interdisciplinary collaboration and belonging.</p>
+                        </section>
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Visual Arts & Installation</h2>
+                            <p class="cv-org">Harvard Design Collective (HDC) – Board Member (2023-2024)</p>
+                            <p class="cv-detail">Designed Harvard-Yale Merchandise and developed branding materials for university-wide events. Organized educational workshops on design software & typography.</p>
+                            <p class="cv-org">Carpenter Center Open Studios</p>
+                            <p class="cv-detail">Presented artwork for 5 studio exhibitions</p>
+                            <p class="cv-org">Conflux Art-Tech Collective - Three-Body Installation</p>
+                            <p class="cv-detail">Worked on projections for an exhibit set to be installed in Stockholm.</p>
+                        </section>
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Volunteering</h2>
+                            <p class="cv-org">First-Year Arts Program (FAP) – Proctor (2024 - Present)</p>
+                            <p class="cv-detail">Introduce 100+ new students to Harvard's arts community, manage workshops, and host guest speakers</p>
+                            <p class="cv-org">First-Year Arts Board (FAB) – Board Member (2023-2024)</p>
+                            <p class="cv-detail">Hosted campus-wide art events, including craft nights and creative workshops.</p>
+                            <p class="cv-org">CAFYIR (501c3 Non-Profit) – Multimedia Design Coordinator (2020-Present)</p>
+                            <p class="cv-detail">Designed social media infographics and branding materials to expand STEAM educational initiatives.</p>
+                        </section>
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Theater Production</h2>
+                            <p class="cv-sub">Harvard-Radcliffe Dramatic Club</p>
+                            <ul class="cv-list">
+                                <li>The Addams Family (Graphic Designer) – Loeb Experimental Theatre (Fall 2025)</li>
+                                <li>Songs for a New World (Graphic Designer) – Loeb Experimental Theatre (Fall 2024)</li>
+                                <li>Gruesome Playground Injuries (Publicity Producer) – Loeb Experimental Theatre (Spring 2025)</li>
+                                <li>Romeo & Juliet (Graphic Designer) – Loeb Experimental Theatre (Fall 2024)</li>
+                                <li>Anastasia (Publicity Producer) – Loeb Mainstage (Fall 2024)</li>
+                                <li>Krapp's Last Tape (Props Designer) – Loeb Experimental Theatre (Fall 2024)</li>
+                                <li>The 25th Annual Putnam County Spelling Bee (Graphic Designer) – Loeb Ex (Spring 2024)</li>
+                                <li>The Kids Are All Right (Graphic Designer) – Agassiz Theater (Spring 2024)</li>
+                            </ul>
+                        </section>
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Skills & Technical Proficiency</h2>
+                            <p class="cv-detail"><strong>Design & Software:</strong> Adobe Photoshop, Illustrator, InDesign, Blender, Typography, Canva, Procreate</p>
+                            <p class="cv-detail"><strong>Languages:</strong> Fluent in Spanish & English, Intermediate Portuguese, Basic ASL & Turkish</p>
+                            <p class="cv-detail"><strong>Artistic Skills:</strong> Silkscreen Printing, Graphic Design, Illustration, Painting, Photography, 3D-Modeling</p>
+                        </section>
+                    </div>
+                    <div class="cv-panel" id="cv-resume">
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Education</h2>
+                            <p class="cv-org">Harvard University — Cambridge, MA</p>
+                            <p class="cv-detail">A.B. joint degree in Art, Film, & Visual Studies and History & Literature. GPA 4.0 — May 2027</p>
+                            <p class="cv-detail">Relevant Coursework: Narrating The Border: Migration and the Media; Art & Politics; Silkscreen; Post Brush: Studio Course; Making Things [Breaking Things]; Expository Writing 20: Breaking the Norm; Race and Empire in the Americas; Code, Data, and Art; Introduction to Comparative Politics</p>
+                            <p class="cv-detail">Extracurriculars: Harvard Undergraduate Design Collective Board member, Club Swim Publicity Chair, First-Year Arts Program Proctor, Harvard-Radcliffe Dramatic Club graphic designer</p>
+                            <p class="cv-org">Orlando Science High School — Orlando, FL</p>
+                            <p class="cv-detail">High School Honors Diploma. Passed 15 AP classes — May 2023</p>
+                            <p class="cv-detail">Extracurriculars: National Art Honor Society President; Student Government Association Vice President; Model United Nations Club Vice President; Turkish Olympiad Competitor</p>
+                            <p class="cv-detail">Awards: Scholastic Art & Writing Awards Gold & Silver Keys (2023), National Merit Scholarship Finalist (2023), AP Scholar with Distinction (2022), Hispanic Heritage Youth Awards Gold for Media & Entertainment (2022), Project Lead The Way Engineering Scholar (2023)</p>
+                        </section>
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Experience</h2>
+                            <p class="cv-org">Harvard Art Museums — Cambridge, MA</p>
+                            <p class="cv-role">Summer Humanities and Arts Research Program Fellow — June 2024 - August 2024</p>
+                            <p class="cv-role">Ho Family Student Tour Guide — September 2024 - Present</p>
+                            <ul class="cv-list">
+                                <li>Develop and deliver thematic spotlight tours to the general public by researching artwork's existing literature and curatorial files; implemented tours in Spanish.</li>
+                                <li>Revamped the museum's free citizenship course by evaluating collections and pedagogical strategies, creating a new curriculum focused on gallery activities.</li>
+                                <li>Assist in interdisciplinary teaching, analyzing, and composing notes on artwork for museum class visits.</li>
+                            </ul>
+                            <p class="cv-org">Office for the Arts (OFA) at Harvard — Cambridge, MA</p>
+                            <p class="cv-role">Ambassador — November 2024 - April 2025</p>
+                            <p class="cv-detail">Organize community and civic-oriented art events, exposing students to OFA resources and artistic careers. Designed graphics for event production and merchandise.</p>
+                            <p class="cv-org">Project Citizenship, 501c3 non-profit — Boston, MA</p>
+                            <p class="cv-role">Summer Programs Intern — June 2025 - August 2025</p>
+                            <p class="cv-detail">Help 100+ clients file for naturalization; interpret attorney consultations in Spanish & Portuguese; compile evidence; manage high-volume caseload in Salesforce CRM; prepare social media materials.</p>
+                            <p class="cv-org">CAFYIR, 501c3 non-profit — Orlando, FL</p>
+                            <p class="cv-role">Executive Board Member & Multimedia Design Coordinator — October 2020 - Present</p>
+                            <p class="cv-detail">Teach k-6 immigrant & refugee children STEAM topics; create outreach & educational social media content; outline lessons & curriculum.</p>
+                            <p class="cv-org">Harvard College Advising Programs Office — Cambridge, MA</p>
+                            <p class="cv-role">Peer Advising Fellow (PAF) — April 2025 - Present</p>
+                            <p class="cv-detail">Advise a cohort of 8 first-year students on course selection and campus resources. Organize, budget, and carry out community-engagement events; create publicity material.</p>
+                        </section>
+                        <section class="cv-section">
+                            <h2 class="cv-heading">Skills & Interests</h2>
+                            <p class="cv-detail"><strong>Technical:</strong> Adobe Photoshop, Illustrator, InDesign, Blender Software, Salesforce, Microsoft Suite</p>
+                            <p class="cv-detail"><strong>Languages:</strong> Fluent Spanish and English, Intermediate Portuguese, Basic ASL & Turkish</p>
+                        </section>
+                    </div>
                 </div>
             </div>
 
             <div class="page" id="contact">
                 <h1 class="page-title">Contact</h1>
                 <div class="page-content">
-                    <!-- Contact page content will go here -->
+                    <p class="contact-intro">Send me a message—I'd love to hear from you.</p>
+                    <!-- To receive submissions: sign up at formspree.io, create a form for ricardofer0106@gmail.com, then replace FORMSPREE_ID below with your form ID -->
+                    <form class="contact-form" id="contactForm" action="https://formspree.io/f/FORMSPREE_ID" method="POST" data-email="ricardofer0106@gmail.com">
+                        <input type="hidden" name="_subject" value="Portfolio inquiry from contact form">
+                        <label class="contact-label" for="contact-name">Name</label>
+                        <input class="contact-input" id="contact-name" type="text" name="name" required placeholder="Your name">
+                        <label class="contact-label" for="contact-email">Email</label>
+                        <input class="contact-input" id="contact-email" type="email" name="email" required placeholder="your@email.com">
+                        <label class="contact-label" for="contact-message">Message</label>
+                        <textarea class="contact-textarea" id="contact-message" name="message" required placeholder="Your message..." rows="5"></textarea>
+                        <button type="submit" class="contact-submit">Send</button>
+                    </form>
                 </div>
             </div>
 

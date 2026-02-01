@@ -59,6 +59,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup Quick Mini Portfolio button (uses images from mini-portfolio folder)
     setupMiniPortfolioButton();
     
+    // Contact form: use mailto fallback if Formspree not set up
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            const action = this.getAttribute('action') || '';
+            if (action.includes('FORMSPREE_ID')) {
+                e.preventDefault();
+                const email = this.dataset.email || 'ricardofer0106@gmail.com';
+                const name = (this.querySelector('[name="name"]') || {}).value || '';
+                const replyTo = (this.querySelector('[name="email"]') || {}).value || '';
+                const message = (this.querySelector('[name="message"]') || {}).value || '';
+                const subject = 'Portfolio inquiry from ' + (name || 'Contact form');
+                const body = (name ? 'Name: ' + name + '\n\n' : '') + (replyTo ? 'Reply-to: ' + replyTo + '\n\n' : '') + 'Message:\n' + message;
+                window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+            }
+        });
+    }
+    
+    // CV tab switching
+    document.querySelectorAll('.cv-tab').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const target = this.getAttribute('data-cv');
+            document.querySelectorAll('.cv-tab').forEach(b => b.setAttribute('aria-pressed', 'false'));
+            document.querySelectorAll('.cv-panel').forEach(p => p.classList.remove('active'));
+            this.setAttribute('aria-pressed', 'true');
+            const panel = document.getElementById('cv-' + target);
+            if (panel) panel.classList.add('active');
+        });
+    });
+    
     // Also listen for sheets data loaded event and reinitialize carousel
     window.addEventListener('sheetsDataLoaded', () => {
         initHomeCarousel();
@@ -113,12 +143,16 @@ function navigateToPage(pageId, addToHistory = true) {
     if (targetPageElement) {
         targetPageElement.classList.add('active');
         
-        // Update body class for series/artwork pages to reduce line opacity
-        document.body.classList.remove('series-page', 'artwork-page');
+        // Update body class for series/artwork/cv/contact pages to fade lines (about keeps lines)
+        document.body.classList.remove('series-page', 'artwork-page', 'cv-page', 'contact-page');
         if (pageId === 'series') {
             document.body.classList.add('series-page');
         } else if (pageId === 'artwork') {
             document.body.classList.add('artwork-page');
+        } else if (pageId === 'cv') {
+            document.body.classList.add('cv-page');
+        } else if (pageId === 'contact') {
+            document.body.classList.add('contact-page');
         }
         
         // Update nav button if it's a main page
@@ -590,7 +624,6 @@ function renderSeriesPage(project) {
                     ${(project.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('')}
                 </div>
             </div>
-            ${project.blurb ? `<p class="series-blurb">${project.blurb}</p>` : ''}
             ${project.statement ? `<div class="series-statement"><p>${project.statement}</p></div>` : ''}
         </div>
     `;
@@ -1407,7 +1440,8 @@ function assignBrushstrokes() {
         '.back-button',
         '.artwork-thumbnail',
         '.nav-arrow',
-        '.project-thumb'
+        '.project-thumb',
+        '.about-box'
     ];
     
     selectors.forEach(selector => {
